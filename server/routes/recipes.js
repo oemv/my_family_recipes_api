@@ -5,11 +5,11 @@ import * as recipes from '../models/recipes';
 let router = express.Router();
 router.route('/recipes')
 .get((req, res)=>{
-    recipes.paginate((recipes, hasMore, error)=>{
+    recipes.paginate((docs, hasMore, error)=>{
         if(error){
-          errorHandler(res, error.message, "Failed to retrieve recipes from database")
+          errorHandler.handle(res, error.message, "Failed to retrieve recipes from database")
         }else{
-          res.status(200).json({recipes, hasMore});
+          res.status(200).json(docs);
         }
     });
 })
@@ -19,21 +19,21 @@ router.route('/recipes')
     //do some validation around the new recipe
     recipes.create(newRecipe, (error, slug)=>{
         if(error){
-            errorHandler(res, error.message, "Error saving new recipe");
+            errorHandler.handle(res, error.message, "Error saving new recipe");
         }else{
             res.status(201).json({'slug':slug});
         }
     });
 });
 
-router.route('/recipes/:id')
+router.route('recipes/:id')
 .get((req, res)=>{
     if(!req.params.id){
-       errorHandler(res, "Invalid id", "Must provide a valid id", 400);
+       errorHandler.handle(res, "Invalid id", "Must provide a valid id", 400);
     }
     recipes.findById(req.params.id, (error, recipe)=>{
         if(error){
-          errorHandler(res, error.message, "Failed to retrieve recipe");
+          errorHandler.handle(res, error.message, "Failed to retrieve recipe");
         }else{
           res.status(200).json(recipe);
         }
@@ -43,16 +43,7 @@ router.route('/recipes/:id')
 
 })
 .delete((req,res)=>{
-    if(!req.params.id){
-       errorHandler(res, "Invalid id", "Must provide a valid id", 400);
-    }
-    recipes.remove(req.params.id, (error, result)=>{
-      if(error){
-          errorHandler(res, error.message, "Error deleting the recipes");
-      }else{
-          res.status(204);
-      }
-    })
+
 });
 
 export default router;
