@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "mocha ./dist/test/*.js",
-    "start": "nodemon ./dist/server.js"
+    "start": "nodemon ./dist/server.js",
+    "debug": "node-debug ./dist/server.js"
   },
   "repository": {
     "type": "git",

@@ -5,11 +5,11 @@ import * as recipes from '../models/recipes';
 let router = express.Router();
 router.route('/recipes')
 .get((req, res)=>{
-    recipes.paginate((docs, hasMore, error)=>{
+    recipes.paginate((recipes, hasMore, error)=>{
         if(error){
           errorHandler(res, error.message, "Failed to retrieve recipes from database")
         }else{
-          res.status(200).json(docs);
+          res.status(200).json({recipes, hasMore});
         }
     });
 })
@@ -26,7 +26,7 @@ router.route('/recipes')
     });
 });
 
-router.route('recipes/:id')
+router.route('/recipes/:id')
 .get((req, res)=>{
     if(!req.params.id){
        errorHandler(res, "Invalid id", "Must provide a valid id", 400);
@@ -43,7 +43,16 @@ router.route('recipes/:id')
 
 })
 .delete((req,res)=>{
-
+    if(!req.params.id){
+       errorHandler(res, "Invalid id", "Must provide a valid id", 400);
+    }
+    recipes.remove(req.params.id, (error, result)=>{
+      if(error){
+          errorHandler(res, error.message, "Error deleting the recipes");
+      }else{
+          res.status(204);
+      }
+    })
 });
 
 export default router;
