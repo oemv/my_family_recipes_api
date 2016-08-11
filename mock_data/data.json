@@ -1,0 +1,68 @@
+{
+  "collections": {
+    "recipes": [{
+      "name": "Tacos al pastor",
+      "created_on" : "2016-05-25T20:49:27.679Z",
+      "updated_on" : "2016-05-25T20:49:27.679Z",
+      "slug" : "tacos-al-pastor-aaabbb", 
+      "prep_time": "120 minutes",
+      "servings": 4,
+      "ingredients": [{
+        "amount": "8",
+        "name": "Chiles cascabel"
+      }, {
+        "amount": "1/4 taza",
+        "name": "Vinagre de manzana"
+      }],
+      "directions": [
+        "Se ponen a dorar los chiles",
+        "se muelten con el ajo, se deja reposar..."
+      ],
+      "keywords": [
+        "Tacos",
+        "Mexican"
+      ],
+      "images": [
+        "images/12345/12345_1.jpg",
+        "images/12345/12345_2.jpg"
+      ],
+      "videos": [],      
+      "comments":[]
+    }, {
+      "name": "Chicharron en salsa",
+      "created_on" : "2016-05-25T20:49:27.679Z",
+      "updated_on" : "2016-05-25T20:49:27.679Z",
+       "slug" : "chicharron-en-salsa-defghi",
+      "prep_time": "30 minutes",
+      "servings": 4,
+      "ingredients": [{
+        "amount": "3",
+        "name": "Jitomates"
+      }, {
+        "amount": "2",
+        "name": "tomates verdes"
+      }, {
+        "amount": "1",
+        "name": "libra de chicharron"
+      }],
+      "directions": [
+        "Se cocen los jitomates con los chiles",
+        "Se muelen con un diente de ajo"
+      ],
+      "keywords": [
+        "Pork",
+        "Mexican"
+      ],
+      "images": [
+        "images/169376/12345_1.jpg",
+        "images/169376/12345_2.jpg"
+      ],
+      "videos": [],      
+      "comments":[]
+    }],
+    "users":[{
+
+    }
+    ]
+  }
+}
