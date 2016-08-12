@@ -1,11 +1,9 @@
 import express from 'express';
+import users from '../models/users';
 
 let router = express.Router();
 
 router.route('/users')
-.get((req, res)=>{
-
-})
 .post((req, res)=>{
 
 });

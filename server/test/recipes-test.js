@@ -1,5 +1,5 @@
 import chai from 'chai';
-import * as recipes from '../models/recipes';
+import recipes from '../models/recipes';
 import * as DB from '../components/db';
 
 let assert = chai.assert;

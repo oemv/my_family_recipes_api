@@ -1,4 +1,4 @@
-import * as users from '../models/users';
+import users from '../models/users';
 import * as DB from '../components/db';
 import chai from 'chai';
 

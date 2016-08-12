@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 
 
 import * as DB from './components/db';
+import authRoutes from './routes/auth';
 import userRoutes from './routes/users';
 import recipeRoutes from './routes/recipes';
 
@@ -23,8 +24,8 @@ app.set("secret", MFR_SECRET);
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
-app.use('/api',[userRoutes, recipeRoutes]);
+app.use('/api',[authRoutes, userRoutes, recipeRoutes]);
 
 app.listen(port, ()=>{
   console.log("My Family Recipes API running on port:"+port);
-})
+});

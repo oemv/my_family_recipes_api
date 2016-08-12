@@ -1,13 +1,14 @@
 import express from 'express';
 import errorHandler from '../components/error-handler';
-import * as recipes from '../models/recipes';
+import validator from '../components/validator';
+import recipes from '../models/recipes';
 
 let router = express.Router();
 router.route('/recipes')
 .get((req, res)=>{
     recipes.paginate((docs, hasMore, error)=>{
         if(error){
-          errorHandler.handle(res, error.message, "Failed to retrieve recipes from database")
+          errorHandler.handleError(res, error.message, "Failed to retrieve recipes from database")
         }else{
           res.status(200).json(docs);
         }
@@ -19,21 +20,22 @@ router.route('/recipes')
     //do some validation around the new recipe
     recipes.create(newRecipe, (error, slug)=>{
         if(error){
-            errorHandler.handle(res, error.message, "Error saving new recipe");
+            errorHandler.handleError(res, error.message, "Error saving new recipe");
         }else{
             res.status(201).json({'slug':slug});
         }
     });
 });
 
-router.route('recipes/:id')
+router.route('/recipes/:id')
 .get((req, res)=>{
-    if(!req.params.id){
-       errorHandler.handle(res, "Invalid id", "Must provide a valid id", 400);
+    let id = req.params.id;
+    if(id || !validator.isValidObjectId(id)){
+       errorHandler.handleError(res, "Invalid id", "Must provide a valid id", 400);
     }
-    recipes.findById(req.params.id, (error, recipe)=>{
+    recipes.findById(id, (error, recipe)=>{
         if(error){
-          errorHandler.handle(res, error.message, "Failed to retrieve recipe");
+          errorHandler.handleError(res, error.message, "Failed to retrieve recipe");
         }else{
           res.status(200).json(recipe);
         }
@@ -43,7 +45,17 @@ router.route('recipes/:id')
 
 })
 .delete((req,res)=>{
-
+    let id = req.params.id;
+    if(id || !validator.isValidObjectId(id)){
+       errorHandler.handleError(res, "Invalid id", "Must provide a valid id", 400);
+    }
+    recipes.remove(id, (error, results)=>{
+        if(error){
+          errorHandler.handleError(res, error.message, "Failed to delete recipe.");
+        }else{
+          res.status(200).end();
+        }
+    });
 });
 
 export default router;
