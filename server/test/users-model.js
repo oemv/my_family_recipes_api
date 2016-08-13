@@ -77,4 +77,24 @@ describe("users", ()=> {
             });
         });
     });
+
+    describe("remove()", ()=> {
+        it("should remove a user by id", (done)=> {
+            let user = {
+                'email': 'test@outlook.com',
+                'display_name': 'Born to die',
+                'display_image': '/users/12346/bornToDie.jpeg',
+                'password': '12345qwert'
+            };
+
+            users.add(user, (error, _id) => {
+                if(error) throw error;
+                users.remove(_id, (deleteError, result)=>{
+                    if(deleteError) throw deleteError;
+                    assert.isNull(deleteError);
+                    done();
+                });
+            });
+        });
+    });
 });

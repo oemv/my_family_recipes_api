@@ -5,7 +5,7 @@ import * as DB from '../components/db';
 let assert = chai.assert;
 let mock_data = require('../../mock_data/data');
 
-describe("recipes", ()=> {
+describe("recipes-model", ()=> {
 
     before((done)=> {
         DB.connect(DB.MODE_TST, done);

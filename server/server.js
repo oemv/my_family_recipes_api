@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import path from 'path';
 import jwt from 'jsonwebtoken';
+import expressValidator from 'express-validator';
 
 
 import * as DB from './components/db';
@@ -22,10 +23,13 @@ let port = process.env.PORT || 8080;
 app.set("secret", MFR_SECRET);
 
 app.use(bodyParser.urlencoded({extended:false}));
+app.use(expressValidator());
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use('/api',[authRoutes, userRoutes, recipeRoutes]);
 
-app.listen(port, ()=>{
+let server = app.listen(port, ()=>{
   console.log("My Family Recipes API running on port:"+port);
 });
+
+export default server;

@@ -1,7 +1,7 @@
 import express from 'express';
 import errorHandler from '../components/error-handler';
-import validator from '../components/validator';
 import recipes from '../models/recipes';
+import recipesValidator from './recipes-validator';
 
 let router = express.Router();
 router.route('/recipes')
@@ -14,11 +14,8 @@ router.route('/recipes')
         }
     });
 })
-.post((req, res)=>{
-    //do some validation
-    let newRecipe = req.body;
-    //do some validation around the new recipe
-    recipes.create(newRecipe, (error, slug)=>{
+.post(recipesValidator.validateNew, (req, res)=>{
+    recipes.create(req.body, (error, slug)=>{
         if(error){
             errorHandler.handleError(res, error.message, "Error saving new recipe");
         }else{
@@ -28,11 +25,7 @@ router.route('/recipes')
 });
 
 router.route('/recipes/:id')
-.get((req, res)=>{
-    let id = req.params.id;
-    if(id || !validator.isValidObjectId(id)){
-       errorHandler.handleError(res, "Invalid id", "Must provide a valid id", 400);
-    }
+.get(recipesValidator.validateId, (req, res)=>{
     recipes.findById(id, (error, recipe)=>{
         if(error){
           errorHandler.handleError(res, error.message, "Failed to retrieve recipe");
@@ -44,11 +37,7 @@ router.route('/recipes/:id')
 .put((req,res)=>{
 
 })
-.delete((req,res)=>{
-    let id = req.params.id;
-    if(id || !validator.isValidObjectId(id)){
-       errorHandler.handleError(res, "Invalid id", "Must provide a valid id", 400);
-    }
+.delete(recipesValidator.validateId, (req, res)=>{
     recipes.remove(id, (error, results)=>{
         if(error){
           errorHandler.handleError(res, error.message, "Failed to delete recipe.");
