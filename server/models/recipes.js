@@ -1,6 +1,5 @@
 import mongo from 'mongodb';
 import * as DB from '../components/db';
-import slug from '../components/slug-generator';
 import {LATEST_RECIPES_NUMBER} from "../constants";
 
 let objectId = mongo.ObjectID;
@@ -18,7 +17,7 @@ let recipes = {
           if (hasMore) {
               docs.pop()
           }
-          callback(docs, hasMore, error);
+          callback(error, docs, hasMore);
       });
   },
   create(recipe, callback) {
@@ -27,7 +26,6 @@ let recipes = {
               name: recipe.name,
               created_on: new Date(),
               updated_on: new Date(),
-              slug: slug(recipe.name),
               prep_time: recipe.prep_time,
               servings: recipe.servings,
               ingredients: recipe.ingredients,
@@ -38,14 +36,7 @@ let recipes = {
               comments:[]
           };
       collection.insertOne(doc, (error, response)=> {
-          callback(error, response.ops[0].slug);
-      });
-  },
-  findBySlug(slug, callback) {
-      let collection = DB.getDB().collection(COLLECTION);
-      let query = {slug};
-      collection.find(query).limit(1).next((error, doc)=> {
-          callback(error, doc);
+          callback(error, response.ops[0]._id.toString());
       });
   },
   findById(id, callback) {
@@ -67,7 +58,7 @@ let recipes = {
   addComment(comment, user, callback) {
       let collection = DB.getDB().collection(COLLECTION),
           findQuery = {
-              'slug': comment.slug
+              '_id': new objectId(comment.recipe_id)
           },
           updateQuery = {
               '$push': {

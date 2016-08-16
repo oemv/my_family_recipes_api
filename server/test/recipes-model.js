@@ -20,8 +20,10 @@ describe("recipes-model", ()=> {
 
     describe("paginate()", ()=> {
         it('should list all recipes', (done)=> {
-            recipes.paginate((docs, hasMore, error)=> {
-                if (error) throw error;
+            recipes.paginate(( error, docs, hasMore )=> {
+                if (error){
+                  throw error;
+                }
                 assert.lengthOf(docs, 2);
                 done();
             });
@@ -30,22 +32,12 @@ describe("recipes-model", ()=> {
 
     describe("create()", ()=> {
         it("should create a new recipe", (done)=> {
-            recipes.create(createMockRecipe("Enchiladas Michoacanas"), ( error, slug ) => {
-                if (error) throw error;
-                assert.typeOf(slug, 'string');
-                assert.isOk(slug);
-                done();
-            });
-        });
-    });
-
-    describe("findBySlug()", ()=> {
-        it("should find a recipe by slug", (done)=> {
-            let slug = 'tacos-al-pastor-aaabbb';
-            recipes.findBySlug(slug, (error, doc) => {
-                if (error) throw error;
-                assert.strictEqual(doc.slug, slug);
-                assert.strictEqual(doc.name, "Tacos al pastor");
+            recipes.create(createMockRecipe("Enchiladas Michoacanas"), ( error, _id ) => {
+                if (error){
+                  throw error;
+                }
+                assert.typeOf(_id, 'string');
+                assert.isOk(_id);
                 done();
             });
         });
@@ -53,28 +45,36 @@ describe("recipes-model", ()=> {
 
     describe("findById()", ()=> {
         it("should find a recipe by id", (done)=> {
-            let slug = 'tacos-al-pastor-aaabbb';
-            recipes.findBySlug(slug, (error, doc) => {
-                if (error) throw error;
-                  let _id = doc._id.toString();
-                  recipes.findById(_id, (error, recipe)=>{
-                    if(error) throw error;
+            recipes.paginate((error, docs, hasMore) => {
+                if (error){
+                  throw error;
+                }
+
+                let first_recipe = docs.pop();
+
+                recipes.findById(first_recipe._id.toString(), ( findError, recipe )=>{
+                    if( findError ){
+                      throw findError;
+                    }
                     assert.isOk(recipe);
-                    assert.strictEqual(recipe.name,"Tacos al pastor");
+                    assert.strictEqual(first_recipe._id.toString(), recipe._id.toString());
                     done();
-                  });
+                });
             });
         });
     });
 
     describe("remove()", ()=> {
         it("should remove a recipe", (done)=> {
-            let slug = 'tacos-al-pastor-aaabbb';
-            recipes.findBySlug(slug, (error, doc) => {
-                if (error) throw error;
-                let _id = doc._id.toString();
+            recipes.paginate((error, docs, hasMore) => {
+                if (error) {
+                  throw error;
+                }
+                let _id = docs.pop()._id.toString();
                 recipes.remove(_id, (deleteError, results)=>{
-                    if(deleteError) throw deleteError;
+                    if(deleteError){
+                        throw deleteError;
+                    }
                     assert.isNull(deleteError);
                     done();
                 });
@@ -84,56 +84,70 @@ describe("recipes-model", ()=> {
 
     describe("addComment()", ()=> {
         it("should add a comment to a recipe", (done)=> {
-            let slug = 'tacos-al-pastor-aaabbb';
-            let body = 'Deliciosos con una coca';
+            recipes.paginate((error, docs, hasMore)=>{
+                if(error){
+                  throw error;
+                }
 
-            let user = {
-                "uid": "5747bc291deeed5011d291eb",
-                "display_name": "Oscar E. Manriquez",
-                "image": "1q2w3e/profile_picture.jpeg"
-            };
+                let recipe_id = docs.pop()._id.toString(),
+                body = 'Deliciosos con una coca',
+                user = {
+                    "uid": "5747bc291deeed5011d291eb",
+                    "display_name": "Oscar E. Manriquez",
+                    "image": "1q2w3e/profile_picture.jpeg"
+                },
+                comment = {
+                    recipe_id,
+                    body
+                };
 
-            let comment = {
-                slug,
-                body
-            };
-
-            recipes.addComment(comment, user, (doc, error)=> {
-                assert.isArray(doc.value.comments);
-                assert.strictEqual(doc.value.comments[0].comment, comment.body);
-                done();
+                recipes.addComment(comment, user, (doc, error)=> {
+                    assert.isArray(doc.value.comments);
+                    assert.strictEqual(doc.value.comments[0].comment, comment.body);
+                    done();
+                });
             });
         });
     });
 
     describe("editComment()", ()=> {
         it("should edit a comment in a recipe", (done)=> {
-            let slug = 'tacos-al-pastor-aaabbb';
-            let body = 'Comment before edit';
+            recipes.paginate((error, docs, hasMore)=>{
+                if(error){
+                    throw error;
+                }
 
-            let user = {
-                "uid": "5747bc291deeed5011d291eb",
-                "display_name": "Oscar E. Manriquez",
-                "image": "1q2w3e/profile_picture.jpeg"
-            };
-
-            let comment = {
-                slug,
-                body
-            };
-
-            recipes.addComment(comment, user, (doc, error)=> {
-                if(error) throw error;
-                let id = doc.value.comments[0].id;
-                let edited_comment = {
-                     id,
-                    body: "Edited comment"
+                let recipe_id = docs.pop()._id.toString(),
+                body = 'Comment before edit',
+                user = {
+                    "uid": "5747bc291deeed5011d291eb",
+                    "display_name": "Oscar E. Manriquez",
+                    "image": "1q2w3e/profile_picture.jpeg"
+                },
+                comment = {
+                    recipe_id,
+                    body
                 };
-                recipes.editComment(edited_comment, user, (editedDoc, editError)=>{
-                    if(editError) throw editError;
-                    assert.isArray(editedDoc.value.comments);
-                    assert.strictEqual(editedDoc.value.comments[0].comment, "Edited comment");
-                    done();
+
+                recipes.addComment(comment, user, (doc, addError)=> {
+                    if( addError ){
+                        throw addError;
+                    }
+
+                    let id = doc.value.comments[0].id,
+                    edited_comment = {
+                        id,
+                        body: "Edited comment"
+                    };
+
+                    recipes.editComment(edited_comment, user, (editedDoc, editError)=>{
+                        if( editError ){
+                            throw editError;
+                        }
+                        assert.isArray(editedDoc.value.comments);
+                        assert.strictEqual(editedDoc.value.comments[0].comment, "Edited comment");
+                        done();
+                    });
                 });
             });
         });
@@ -141,38 +155,48 @@ describe("recipes-model", ()=> {
 
     describe("deleteComment()", ()=>{
        it("should delete a comment", (done)=>{
-           let slug = 'tacos-al-pastor-aaabbb';
-           let body = 'Temporal comment';
+          recipes.paginate((error, docs, hasMore)=>{
+              if( error ){
+                  throw error;
+              }
 
-           let user = {
-               "uid": "5747bc291deeed5011d291eb",
-               "display_name": "Oscar E. Manriquez",
-               "image": "1q2w3e/profile_picture.jpeg"
-           };
+              let recipe_id = docs.pop()._id.toString(),
+              body = 'Temporal comment',
+              user = {
+                  "uid": "5747bc291deeed5011d291eb",
+                  "display_name": "Oscar E. Manriquez",
+                  "image": "1q2w3e/profile_picture.jpeg"
+              },
+              comment = {
+                  recipe_id,
+                  body
+              };
 
-           let comment = {
-               slug,
-               body
-           };
+              recipes.addComment(comment, user, (doc, addError)=> {
+                  if( addError ){
+                     throw addError;
+                  }
 
-           recipes.addComment(comment, user, (doc, error)=> {
-               if(error) throw error;
-               let commentId =  '' + doc.value.comments[0].id;
+                  let commentId =  '' + doc.value.comments[0].id,
+                  args = {
+                      commentId,
+                      userId: user.uid
+                  };
 
-               let args = {
-                   commentId,
-                   userId: user.uid
-               };
-
-               recipes.deleteComment(args, (error)=>{
-                   if(error) throw error;
-                   recipes.findBySlug(slug, (error, doc) => {
-                       if (error) throw error;
-                       assert.strictEqual(doc.comments.length, 0);
-                       done();
-                    });
-               });
-           });
+                  recipes.deleteComment(args, (deleteError)=>{
+                      if( deleteError ){
+                         throw deleteError;
+                      }
+                      recipes.findById(recipe_id, (findError, doc) => {
+                          if ( findError ){
+                              throw findError;
+                          }
+                          assert.strictEqual(doc.comments.length, 0);
+                          done();
+                       });
+                  });
+              });
+          });
        });
     });
 });

@@ -10,25 +10,26 @@ router.route('/users')
         if(error){
             errorHandler.handleError(res, error.message, "Error saving new user");
         }else{
-            res.status(201).location('/api/users/'+id).json({'id':id});
+            res.status(201).location('/api/users/'+id).json({id});
         }
     });
 });
 
-router.route('users/:id')
-.get(usersValidator.validateId, (req, res)=>{
-    users.findById(id, (error, user)=>{
+router.route('/users/:email')
+.get(usersValidator.validateEmail, (req, res)=>{
+    users.findByEmail(req.params.email, (error, user)=>{
         if(error){
           errorHandler.handleError(res, error.message, "Failed to retrieve user");
         }else{
+          delete user.password;
           res.status(200).json(user);
         }
     });
 })
-.put(usersValidator.validateId, (req, res)=>{
+.put(usersValidator.validateEmail, (req, res)=>{
 
 })
-.delete(usersValidator.validateId, (req,res)=>{
+.delete(usersValidator.validateEmail, (req,res)=>{
     users.remove(id, (error, results)=>{
         if(error){
           errorHandler.handleError(res, error.message, "Failed to delete user.");

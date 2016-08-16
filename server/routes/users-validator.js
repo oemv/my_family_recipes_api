@@ -9,7 +9,12 @@ let usersValidator = {
       return next();
   },
   validateId(req, res, next){
-    req.checkQuery('id', 'Invalid id').isMongoId();
+    req.checkParams('id', 'Invalid id').isMongoId();
+    errorHandler.checkValidationErrors(req, res);
+    return next();
+  },
+  validateEmail(req, res, next){
+    req.checkParams('email', 'Invalid email address').isEmail();
     errorHandler.checkValidationErrors(req, res);
     return next();
   }

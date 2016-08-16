@@ -4,7 +4,6 @@
       "name": "Tacos al pastor",
       "created_on" : "2016-05-25T20:49:27.679Z",
       "updated_on" : "2016-05-25T20:49:27.679Z",
-      "slug" : "tacos-al-pastor-aaabbb", 
       "prep_time": "120 minutes",
       "servings": 4,
       "ingredients": [{
@@ -26,13 +25,12 @@
         "images/12345/12345_1.jpg",
         "images/12345/12345_2.jpg"
       ],
-      "videos": [],      
+      "videos": [],
       "comments":[]
     }, {
       "name": "Chicharron en salsa",
       "created_on" : "2016-05-25T20:49:27.679Z",
       "updated_on" : "2016-05-25T20:49:27.679Z",
-       "slug" : "chicharron-en-salsa-defghi",
       "prep_time": "30 minutes",
       "servings": 4,
       "ingredients": [{
@@ -57,7 +55,7 @@
         "images/169376/12345_1.jpg",
         "images/169376/12345_2.jpg"
       ],
-      "videos": [],      
+      "videos": [],
       "comments":[]
     }],
     "users":[{

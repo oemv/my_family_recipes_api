@@ -33,9 +33,9 @@ let users = {
           callback(error, result.ops[0]._id.toString());
       });
   },
-  remove(id, callback) {
+  remove(email, callback) {
       let collection = DB.getDB().collection(COLLECTION);
-      let query = {'_id': new objectId(id)};
+      let query = {'email': email};
       collection.deleteOne( query, (error, results)=>{
         if(typeof callback === "function"){
             callback(error, results);

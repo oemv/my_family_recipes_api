@@ -29,7 +29,9 @@ describe("users", ()=> {
                 };
 
                 users.add(user, (error, doc) => {
-                   if(error) throw error;
+                   if(error){
+                      throw error;
+                   }
                     assert.isOk(doc);
                     done();
                 });
@@ -71,7 +73,6 @@ describe("users", ()=> {
                     if(error) throw error;
                     assert.isOk(foundUser);
                     assert.strictEqual(foundUser.email, user.email);
-                    //console.dir(foundUser);
                     done();
                 });
             });
@@ -89,7 +90,7 @@ describe("users", ()=> {
 
             users.add(user, (error, _id) => {
                 if(error) throw error;
-                users.remove(_id, (deleteError, result)=>{
+                users.remove(user.email, (deleteError, result)=>{
                     if(deleteError) throw deleteError;
                     assert.isNull(deleteError);
                     done();

@@ -39,9 +39,6 @@
     "jsonwebtoken": "^7.1.8",
     "mongodb": "^2.2.5",
     "morgan": "^1.7.0",
-    "shortid": "^2.2.6",
-    "slugg": "^1.0.0",
-    "underscore": "^1.8.3",
     "validator": "^5.5.0"
   },
   "devDependencies": {
