@@ -24,9 +24,9 @@ describe("users-router", ()=> {
     describe('POST /api/users', ()=>{
         it('should create a new user', (done)=>{
             let user = {
-                'email': 'oscar1_@hotmail.com',
-                'display_name': 'Oscar E. Manriquez',
-                'display_image': '/users/12345/oemanriquez.jpeg',
+                'email': 'johndoe@hotmail.com',
+                'display_name': 'Johnny Doe',
+                'display_image': '/users/12345/jd.jpeg',
                 'password': '1q2w3e4r5t'
             };
 
@@ -49,9 +49,9 @@ describe("users-router", ()=> {
     describe("GET /api/users/:email", ()=> {
         it('should return a user by email', (done)=> {
             let user = {
-                'email': 'oemanriquez@gmail.com',
-                'display_name': 'OEMV',
-                'display_image': '/users/12345/oemanriquez.jpeg',
+                'email': 'janedoe@gmail.com',
+                'display_name': 'JD',
+                'display_image': '/users/12345/janedoe.jpeg',
                 'password': 'secret'
             };
 

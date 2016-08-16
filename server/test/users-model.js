@@ -22,9 +22,9 @@ describe("users", ()=> {
     describe("add()", ()=> {
         it("should add a new user", (done)=> {
                 let user = {
-                    'email': 'oscar1_@hotmail.com',
-                    'display_name': 'Oscar E. Manriquez',
-                    'display_image': '/users/12345/oemanriquez.jpeg',
+                    'email': 'johndoe@outlook.com',
+                    'display_name': 'John Doe',
+                    'display_image': '/users/12345/foobar.jpeg',
                     'password': '12345qwert'
                 };
 
@@ -41,9 +41,9 @@ describe("users", ()=> {
     describe("findByEmail()", ()=> {
         it("should find a user by email id", (done)=> {
             let user = {
-                'email': 'oemanriquez@gmail.com',
-                'display_name': 'Oscar E. Manriquez',
-                'display_image': '/users/12344/oemanriquez.jpeg',
+                'email': 'janedoe@gmail.com',
+                'display_name': 'Jane Doe',
+                'display_image': '/users/12344/jdoe.jpeg',
                 'password': '12345qwert'
             };
 
