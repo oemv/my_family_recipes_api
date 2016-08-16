@@ -20,7 +20,7 @@ DB.connect(DB.MODE_DEV,()=>{
 
 let app = express();
 let port = process.env.PORT || 8080;
-app.set("secret", MFR_SECRET);
+//app.set("secret", MFR_SECRET);
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(expressValidator());

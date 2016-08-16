@@ -5,6 +5,7 @@ import validator from 'validator';
 import users from '../models/users';
 import errorHandler from '../components/error-handler';
 import auth from '../components/auth';
+import { MFR_SECRET } from '../constants';
 
 let router = express.Router();
 
@@ -22,18 +23,37 @@ router.route('/authenticate')
           if(!auth.isValidPassword(user.password, req.body.password)){
             res.json({ success: false, message: 'Authentication failed. Wrong password.' });
           }else{
-            let token = jwt.sign(user, app.get('secret'), {
-                expiresInMinutes: 1440 // expires in 24 hours
+            let access_token = jwt.sign(user, MFR_SECRET, {
+                expiresIn: (24 * 60 * 60) // expires in 24 hours
             });
             res.json({
               success: true,
-              token: token
+              access_token
             });
           }
       }else{
           errorHandler.handleError(res, "User not found", "Please provide a valid username", 404);
       }
   });
+});
+
+router.use(function(req, res, next) {
+  var token = req.body.access_token || req.query.access_token || req.headers['x-access-token'];
+  if (token) {
+    jwt.verify(token, MFR_SECRET, function(err, decoded) {
+      if (err) {
+        return res.json({ success: false, message: 'Failed to authenticate token.' });
+      } else {
+        req.decoded = decoded;
+        next();
+      }
+    });
+  } else {
+    return res.status(403).send({
+        success: false,
+        message: 'Access token must be provided.'
+    });
+  }
 });
 
 export default router;
