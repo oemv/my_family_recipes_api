@@ -23,7 +23,7 @@ export function connect( mode , done ){
             uri = TST_DATABASE_URL;
             break;
         case MODE_PRD:
-            uri = PRD_DATABASE_URL;
+            uri = process.env.MONGODB_URI;
             break;
         default:
             console.log('Unknown database mode')

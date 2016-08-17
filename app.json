@@ -1,0 +1,7 @@
+{
+  "name": "My family recipes API V1.0",
+  "description": "My family recipes API",
+  "repository": "https://github.com/oemv/my_family_recipes_api.git",
+  "keywords": ["node", "express", "MEAN", "mongodb", "REST", "API"],
+  "addons": ["mongolab"]
+}

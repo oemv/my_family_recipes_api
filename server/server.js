@@ -13,7 +13,7 @@ import recipeRoutes from './routes/recipes';
 
 import { MFR_SECRET } from './constants';
 
-DB.connect(DB.MODE_DEV,()=>{
+DB.connect(DB.MODE_PRD,()=>{
     console.log("Connected to database");
 });
 

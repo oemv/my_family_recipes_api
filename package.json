@@ -8,8 +8,8 @@
   },
   "scripts": {
     "test": "mocha ./dist/test/*.js",
-    "start": "nodemon ./dist/server.js",
-    "debug": "node-debug ./dist/server.js"
+    "start": "node ./dist/server.js",
+    "postinstall": "gulp default"
   },
   "repository": {
     "type": "git",
