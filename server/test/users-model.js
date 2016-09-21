@@ -25,7 +25,7 @@ describe("users", ()=> {
                     'email': 'johndoe@outlook.com',
                     'display_name': 'John Doe',
                     'display_image': '/users/12345/foobar.jpeg',
-                    'password': '12345qwert'
+                    'password': 'foobar'
                 };
 
                 users.add(user, (error, doc) => {
@@ -79,7 +79,8 @@ describe("users", ()=> {
         });
     });
 
-    describe("remove()", ()=> {
+    //describe.skip("remove()", ()=> {
+    describe.skip("remove()", ()=> {
         it("should remove a user by id", (done)=> {
             let user = {
                 'email': 'test@outlook.com',
